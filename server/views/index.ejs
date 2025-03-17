@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Re-Lease | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: rgba(0, 51, 102, 0.95);
+            --secondary-color: rgba(80, 227, 194, 0.9);
+            --background-color: rgba(244, 244, 244, 0.95);
+            --text-color: #333;
+            --border-color: #ddd;
+            --shadow-color: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('/giammarco-boscaro-zeH-ljawHtg-unsplash.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            color: var(--text-color);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+}
+
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        nav {
+            margin-top: 1rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-menu li {
+            margin: 0 1rem;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            background-color: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: calc(100vh - 60px);
+        }
+
+        .split-container {
+            display: flex;
+            width: 100%;
+            gap: 2rem;
+        }
+
+        .half-page {
+            width: 90%;
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            margin: 0 auto;
+            top: -10px;
+            position: relative;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus, button:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 0.75rem;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: rgba(0, 51, 102, 1);
+            transform: scale(1.02);
+        }
+
+        button.short {
+            width: auto; 
+            padding: 0.5rem 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .split-container {
+                flex-direction: column;
+            }
+
+            .half-page {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Book Re-Lease</h1>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="/browse">Browse Books</a></li>
+                <li><a href="/index">Post Your Book</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/login" id="logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="split-container">
+            <section id="post" class="half-page center">
+                <h2>Post Your Book</h2>
+                <form id="postBookForm">
+                    <input type="text" id="bookTitle" name="bookTitle" placeholder="Book Title" required>
+                    <input type="text" id="bookAuthor" name="bookAuthor" placeholder="Author" required>
+                    <select id="bookType" name="bookType" required>
+                        <option value="" disabled selected>Select Type</option>
+                        <option value="sell">Sell</option>
+                        <option value="rent">Rent</option>
+                    </select>
+                    <input type="number" id="bookPrice" name="bookPrice" placeholder="Price" required min="0">
+                    <input type="file" id="bookPhoto" name="photo" accept="image/*" required>
+                    <button class="short" type="submit">Post Book</button>
+                </form>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // API URL
+        const apiUrl = '/';
+
+        // Logout functionality
+        document.getElementById('logout').addEventListener('click', function(e) {
+            e.preventDefault();
+            sessionStorage.clear();
+            fetch('/api/logout', {
+                method: "POST",
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/login';
+                }
+            });
+        });
+
+        console.log("the token: " + sessionStorage.getItem('token'));
+        // Event listener for posting a new book
+        const form = document.getElementById('postBookForm');
+        form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        const formData = new FormData(form); // Collect form data, including the file
+        
+        fetch('/api/books/create-Book', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'authorization': sessionStorage.getItem('token') // If authentication is required
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Book posted successfully!');
+                form.reset();
+            } else {
+                alert(data.message || 'Failed to post the book.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    });
+    </script>
+</body>
+</html>
