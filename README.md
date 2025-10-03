@@ -1,2 +1,3 @@
-# CollegMiniProject
+# College MiniProject
 Hey there!
+
